@@ -1,7 +1,7 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { h } from "preact";
 import { tw } from "twind";
-
+import Header from "../src/Header.tsx";
 import { Pokemon } from "../utils/types.ts";
 import { DB, TOKEN } from "../utils/env.ts";
 import PokemonCard from "../src/PokemonCard.tsx";
@@ -43,12 +43,13 @@ export default function Home(
 
   return (
     <div class={tw`mx-auto max-w-screen-xl`}>
+      <Header />
       <form class={tw`flex w-full gap-2`}>
         <input
           type="text"
           name="q"
           value={query}
-          class={tw`flex-grow w-full shadow-sm focus:ring-indigo-800 focus:border-indigo-800 block sm:text-lg border-black-600 border-1 rounded-md p-3`}
+          class={tw`flex-grow w-full shadow-sm focus:ring-indigo-800 focus:border-indigo-800 block sm:text-lg  border-1 rounded-md p-3`}
         />
         <button
           type="submit"

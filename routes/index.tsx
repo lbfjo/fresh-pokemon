@@ -1,11 +1,14 @@
-import { Hadlers, PageProps } from "$fresh/server.ts";
+import { Handlers, PageProps } from "$fresh/server.ts";
 import { h } from "preact";
 import { tw } from "twind";
+
 import { Pokemon } from "../utils/types.ts";
 import { DB, TOKEN } from "../utils/env.ts";
 import PokemonCard from "../src/PokemonCard.tsx";
+
 export const handler: Handlers<{
   pokemon: Pokemon[];
+  query: string;
 }> = {
   async GET(req, ctx) {
     const url = new URL(req.url);
@@ -25,24 +28,27 @@ export const handler: Handlers<{
         ...p,
         image: `https://${DB}.directus.app/assets/${p.image}?access_token=${TOKEN}`,
       })),
+      query,
     });
   },
 };
+
 export default function Home(
   props: PageProps<{
     pokemon: Pokemon[];
     query: string;
   }>
 ) {
-  const { pokemon } = props.data;
+  const { pokemon, query } = props.data;
+
   return (
     <div class={tw`mx-auto max-w-screen-xl`}>
       <form class={tw`flex w-full gap-2`}>
         <input
           type="text"
           name="q"
-          value={""}
-          class={tw`flex-grow w-full shadow-sm focus:ring-indigo-800 focus:border-indigo-800 block sm:text-lg  border-1 rounded-md p-3`}
+          value={query}
+          class={tw`flex-grow w-full shadow-sm focus:ring-indigo-800 focus:border-indigo-800 block sm:text-lg border-black-600 border-1 rounded-md p-3`}
         />
         <button
           type="submit"
@@ -51,9 +57,10 @@ export default function Home(
           Search
         </button>
       </form>
+
       <div class={tw`grid sm:grid-cols-2 md:grid-cols-3 mt-5 gap-2`}>
         {pokemon.map((pokemon) => (
-          <PokemonCard key={pokemon.id} pokemon={pokemon} />
+          <PokemonCard key={pokemon.id} pokemon={pokemon} allowAdd />
         ))}
       </div>
     </div>
